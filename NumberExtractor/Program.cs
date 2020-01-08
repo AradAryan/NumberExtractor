@@ -13,93 +13,58 @@ namespace NumberExtractor
         /// <summary>
         /// Context of File
         /// </summary>
-        private static string context = File.ReadAllText(@"C:\Users\faranam\Desktop\Exam\04 - Number Extractor\sampleText.txt");
+        private static string firstDirectory =
+            @"C:\Users\faranam\Desktop\Exam\04 - Number Extractor\sampleText.txt";
 
         /// <summary>
         /// Address of Output File
         /// </summary>
-        private static string secondDirectory = @"C:\Users\faranam\Desktop\NumberExtractor.txt";
+        private static string secondDirectory =
+            @"C:\Users\faranam\Desktop\NumberExtractor.txt";
 
-        public static void NumberExtractor(string index)
+        /// <summary>
+        /// Extracting Numbers
+        /// </summary>
+        public static void NumberExtractor()
         {
-            string output = "";
-            var matches = Regex.Matches(input: context, pattern: @"\d", options: RegexOptions.None);
-            var numbers = new string[matches.Count];
-            string cache = "";
-            int temp;
-            output = context;
-
-            for (int i = 0; i < matches.Count; i++)
-            {
-                numbers[i] = matches[i].Value;
-            }
-            for (int i = 0; i < 20; i++)
-            {
-
-                temp = output.IndexOf(numbers[i].ToString());
-                if (!output.StartsWith(numbers[i + 1]))
-                {
-                    cache += numbers[i];
-                    cache += Environment.NewLine;
-                }
-                output = output.Remove(0, temp + 1);
-
-                if (output.StartsWith(numbers[i + 1]))// || output.Substring(0, 1) == ".")
-                {
-                    cache += numbers[i + 1];
-                    output = output.Remove(0, 1);
-                    i++;
-                }
-                else
-                    cache += Environment.NewLine;
-
-            }
-            Console.WriteLine(cache);
-        }
-        static void Main(string[] args)
-        {
-            // NumberExtractor(context);
-
-
-            // Define a regular expression for repeated words.
-            Regex rx = new Regex(@"\d{1,20}",
-
-              RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-            // Define a test string.        
-            string Path =
-                @"C:\Users\faranam\Desktop\Exam\04 - Number Extractor\sampleText.txt";
-            StreamReader SR = new StreamReader(Path);
-            var Lines = System.IO.File.ReadAllLines(Path);
-
-            string NewPath = @"C:\Users\faranam\Desktop\Exam\04 - Number Extractor\Mary.txt";
-            FileStream fs = File.Open(NewPath, FileMode.Append, FileAccess.Write);
-            StreamWriter sw = new StreamWriter(fs);
+            Regex reGex = new Regex(
+                @"\d{1,20}",
+                RegexOptions.Compiled);
+            FileStream file = File.Open(
+               secondDirectory,
+               FileMode.Append,
+               FileAccess.Write);
+            StreamReader streamReader = new StreamReader(firstDirectory);
+            StreamWriter streamWriter = new StreamWriter(file);
+            var Lines = File.ReadAllLines(firstDirectory);
 
             for (int i = 0; i < Lines.Length; i++)
             {
-
-                // Find matches.
-                MatchCollection matches = rx.Matches(Lines[i].ToString());
-
-                // Report on each match.
-                foreach (Match match in matches)
+                MatchCollection matchesResult =
+                    reGex.Matches(Lines[i].ToString());
+                foreach (Match item in matchesResult)
                 {
-                    GroupCollection groups = match.Groups;
-                    sw.WriteLine("{0} : {1}",
-                                  match.Value,
-                                  groups[0].Index);
-
+                    GroupCollection groupsCollection = item.Groups;
+                    streamWriter.WriteLine($"{ item.Value} : { groupsCollection[0].Index}");
                 }
-
-                Lines = File.ReadAllLines(Path);
-
+                //var context = File.ReadAllLines(secondDirectory);
+                streamWriter.Flush();
+                file.Flush();
             }
 
-            sw.Close();
-            fs.Close();
-            Console.ReadKey();
+            streamWriter.Close();
+            file.Close();
+        }
 
+        /// <summary>
+        /// Main Function
+        /// </summary>
+        /// <param name="args"></param>
+        static void Main(string[] args)
+        {
+            NumberExtractor();
+
+            Console.WriteLine("Jobs Done!");
             Console.ReadKey();
         }
     }
