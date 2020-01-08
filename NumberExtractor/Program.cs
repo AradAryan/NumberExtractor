@@ -10,6 +10,7 @@ namespace NumberExtractor
 {
     class Program
     {
+        #region Fields
         /// <summary>
         /// Context of File
         /// </summary>
@@ -21,7 +22,9 @@ namespace NumberExtractor
         /// </summary>
         private static string secondDirectory =
             @"C:\Users\faranam\Desktop\NumberExtractor.txt";
+        #endregion
 
+        #region Nmuber Extractor
         /// <summary>
         /// Extracting Numbers
         /// </summary>
@@ -55,7 +58,9 @@ namespace NumberExtractor
             streamWriter.Close();
             file.Close();
         }
+        #endregion
 
+        #region Main Function
         /// <summary>
         /// Main Function
         /// </summary>
@@ -67,5 +72,6 @@ namespace NumberExtractor
             Console.WriteLine("Jobs Done!");
             Console.ReadKey();
         }
+        #endregion
     }
 }
